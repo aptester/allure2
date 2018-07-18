@@ -7,6 +7,7 @@
     <Results>
         <UnitTestResult executionId="a0c122ad-b99a-4e42-b42c-9f03a42e789d" testId="6efcec51-ecd8-464a-afdf-a8f254074a1a" testName="MyCompany.TestSuite.IntegrationTests.Retrieve.RetrieveTestCases.Test_BookingIdInResponse_Succeeds" computerName="ip-10-0-12-95" duration="00:00:00.0010000" startTime="2017-09-11T07:32:55.4659624+00:00" endTime="2017-09-11T07:32:55.4659679+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a0c122ad-b99a-4e42-b42c-9f03a42e789d">
             <Output>
+                <StdOut>[Info]: Some info</StdOut>
                 <ErrorInfo>
                     <Message>Some message</Message>
                     <StackTrace>Some trace</StackTrace>

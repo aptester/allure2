@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,7 @@ public class TrxPlugin implements Reader {
     public static final String ID_ATTRIBUTE = "id";
     public static final String EXECUTION_ID_ATTRIBUTE = "executionId";
     public static final String OUTPUT_ELEMENT_NAME = "Output";
+    public static final String STANDARD_OUTPUT_ELEMENT_NAME = "StdOut";
     public static final String MESSAGE_ELEMENT_NAME = "Message";
     public static final String STACK_TRACE_ELEMENT_NAME = "StackTrace";
     public static final String ERROR_INFO_ELEMENT_NAME = "ErrorInfo";
@@ -171,10 +173,20 @@ public class TrxPlugin implements Reader {
     }
 
     private Optional<String> getStatusMessage(final XmlElement unitTestResult) {
-        return unitTestResult.getFirst(OUTPUT_ELEMENT_NAME)
+        StringBuilder message = new StringBuilder();
+        Optional<String> outputMessage = unitTestResult.getFirst(OUTPUT_ELEMENT_NAME)
+                .flatMap(output -> output.getFirst(STANDARD_OUTPUT_ELEMENT_NAME))
+                .map(XmlElement::getValue);
+
+        String[] lines = outputMessage.orElse("").split(System.getProperty("line.separator"));
+        String[] result = Arrays.stream(lines).filter(x -> x.charAt(0) == '[').toArray(String[]::new);
+        message = message.append(String.format("%s%n", String.join(System.getProperty("line.separator"),result)));
+
+        message.append(unitTestResult.getFirst(OUTPUT_ELEMENT_NAME)
                 .flatMap(output -> output.getFirst(ERROR_INFO_ELEMENT_NAME))
                 .flatMap(output -> output.getFirst(MESSAGE_ELEMENT_NAME))
-                .map(XmlElement::getValue);
+                .map(XmlElement::getValue).orElse(""));
+        return Optional.of(message.toString());
     }
 
     private Optional<String> getStatusTrace(final XmlElement unitTestResult) {

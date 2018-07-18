@@ -87,7 +87,7 @@ public class TrxPluginTest {
 
         assertThat(captor.getAllValues())
                 .extracting(TestResult::getStatusMessage, TestResult::getStatusTrace)
-                .containsExactly(tuple("Some message", "Some trace"));
+                .containsExactly(tuple("[Info]: Some info"+System.getProperty("line.separator")+"Some message", "Some trace"));
     }
 
     private void process(String... strings) throws IOException {
